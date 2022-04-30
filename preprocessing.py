@@ -220,7 +220,7 @@ def detect_phrases(
         # modify texts to merge detected n-grams together
         tokenized_docs = phrase_model[tokenized_docs]
     # remove underscores connecting words in n-grams
-    tokenized_docs = [[token.replace("_", " ") for token in doc] for doc in tokenized_docs]
+    tokenized_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_docs]
     return phrases, tokenized_docs, phrase_models
 
 
