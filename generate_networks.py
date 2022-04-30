@@ -3,7 +3,6 @@ This program generates a series of networks according to one text preprocessing 
 """
 
 import argparse
-from doctest import master
 import pickle
 from time import time
 from copy import deepcopy
@@ -79,29 +78,29 @@ nlp = preprocessing.create_pipeline(detect_sentences=True,
                                     filter_config=filter_dict)
 
 # apply preprocessing
-t0 = time.time()
+t0 = time()
 newsgroups_train_docs = list(nlp.pipe(newsgroups_train))
-t1 = time.time()
+t1 = time()
 print(f"20 NG train processed in {t1 - t0} seconds")
 
-t0 = time.time()
+t0 = time()
 newsgroups_test_docs = list(nlp.pipe(newsgroups_test))
-t1 = time.time()
+t1 = time()
 print(f"20 NG test processed in {t1 - t0} seconds")
 
-t0 = time.time()
+t0 = time()
 reuters_train_docs = list(nlp.pipe(reuters_train))
-t1 = time.time()
+t1 = time()
 print(f"Reuters train processed in {t1 - t0} seconds")
 
-t0 = time.time()
+t0 = time()
 reuters_test_docs = list(nlp.pipe(reuters_test))
-t1 = time.time()
+t1 = time()
 print(f"Reuters test processed in {t1 - t0} seconds")
 
-t0 = time.time()
+t0 = time()
 wiki_text_docs = list(nlp.pipe(wiki_text))
-t1 = time.time()
+t1 = time()
 print(f"Wikitext processed in {t1 - t0} seconds")
 
 del newsgroups_train
@@ -132,7 +131,7 @@ del wiki_text_docs
 
 # detect and apply phrases if selected
 if not (args.phrases == "none"):
-    t0 = time.time()
+    t0 = time()
     # detect phrases
     ng_phrases, tokenized_ng_train_docs, ng_phrase_models = preprocessing.detect_phrases(tokenized_ng_train_docs,
                                                       num_iterations=2,
@@ -173,7 +172,7 @@ if not (args.phrases == "none"):
         tokenized_wiki_rt_docs = model[tokenized_wiki_rt_docs]
     tokenized_wiki_rt_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_wiki_rt_docs]
 
-    t1 = time.time()
+    t1 = time()
     print(f"Phrases detected in {t1 - t0} seconds")
 # still want to make sure spaces are replaced with _ 
 else:
@@ -194,7 +193,7 @@ else:
 del tokenized_wiki_docs
 
 # create vocabulary and dictionary objects for filtering and filter
-t0 = time.time()
+t0 = time()
 ng_vocab, ng_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_ng_train_docs, min_threshold=None)
 tokenized_ng_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_ng_train_sents, ng_vocab)
 tokenized_ng_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_ng_train_docs, ng_vocab)
@@ -218,11 +217,11 @@ tokenized_rt_train_docs = [doc for doc in tokenized_rt_train_docs if len(doc) > 
 tokenized_rt_test_docs = [doc for doc in tokenized_rt_test_docs if len(doc) > 0]
 tokenized_wiki_rt_docs = [doc for doc in tokenized_wiki_rt_docs if len(doc) > 0]
 
-t1 = time.time()
+t1 = time()
 print(f"Vocabulary created and docs filtered in {t1 - t0} seconds")
 
 # create networks for a variety of parameters
-t0 = time.time()
+t0 = time()
 ng_sentence_nb = network_creation.SentenceNetworkBuilder(tokenized_ng_train_sents, 
                                                          ng_dictionary)
 ng_window5_nb = network_creation.WindowNetworkBuilder(tokenized_ng_train_sents, 
@@ -261,7 +260,7 @@ for t in [0.0, 0.35]:
     rt_window5_nb.save_network(f"./networks/rt_window5_npmi_{t}.txt", type="npmi", threshold=t)
     rt_window10_nb.save_network(f"./networks/rt_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
-t1 = time.time()
+t1 = time()
 print(f"Networks generated and saved in {t1 - t0} seconds")
 
 # save necessary objects for topic modelling
