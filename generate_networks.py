@@ -27,17 +27,17 @@ print(args)
 
 # load the datasets
 
-with open("./text_datasets/20newsgroups_train_small.txt", "r") as f:
+with open("./text_datasets/20newsgroups_train.txt", "r") as f:
     newsgroups_train = f.read().split("\n")
-with open("./text_datasets/20newsgroups_test_small.txt", "r") as f:
+with open("./text_datasets/20newsgroups_test.txt", "r") as f:
     newsgroups_test = f.read().split("\n")
 
-with open("./text_datasets/reuters_train_small.txt", "r") as f:
+with open("./text_datasets/reuters_train.txt", "r") as f:
     reuters_train = f.read().split("\n")
-with open("./text_datasets/reuters_test_small.txt", "r") as f:
+with open("./text_datasets/reuters_test.txt", "r") as f:
     reuters_test = f.read().split("\n")
 
-with open("./text_datasets/wikitext_small.txt", "r") as f:
+with open("./text_datasets/wikitext.txt", "r") as f:
     wiki_text = f.read().split('\n')
 
 # need to specify entity types for NER
