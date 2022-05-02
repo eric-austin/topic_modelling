@@ -5,7 +5,7 @@ import igraph as ig
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.models import LdaModel
 from time import time
-from top2vec import Top2Vec
+# from top2vec import Top2Vec
 
 import community_utils
 
@@ -21,44 +21,44 @@ def main():
     ng_dict = master_object["ng_dict"]
     rt_dict = master_object["rt_dic"]
 
-    rows = []
+    # rows = []
 
-    # first lets evaluate LDA
-    # let's use 20NG first
-    t0 = time()
-    for n_topics in [20, 50, 100]:
-        corpus = [ng_dict.doc2bow(text) for text in master_object["ng_train"]]
-        lda = LdaModel(corpus, num_topics=n_topics)
-        for ref in ["train", "test", "wiki"]:
-            key = "ng_" + ref
-            ref_corpus = master_object[key]
-            for coherence in ["c_v", "c_npmi"]:
-                for topn in [5, 10, 20]:
-                    cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=ng_dict, topn=topn)
-                    score = cm.get_coherence()
-                    row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
-                    rows.append(row)
-    t1 = time()
-    print(f"LDA on 20 NG finished in {t1 - t0} seconds")
+    # # first lets evaluate LDA
+    # # let's use 20NG first
+    # t0 = time()
+    # for n_topics in [20, 50, 100]:
+    #     corpus = [ng_dict.doc2bow(text) for text in master_object["ng_train"]]
+    #     lda = LdaModel(corpus, num_topics=n_topics)
+    #     for ref in ["train", "test", "wiki"]:
+    #         key = "ng_" + ref
+    #         ref_corpus = master_object[key]
+    #         for coherence in ["c_v", "c_npmi"]:
+    #             for topn in [5, 10, 20]:
+    #                 cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=ng_dict, topn=topn)
+    #                 score = cm.get_coherence()
+    #                 row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
+    #                 rows.append(row)
+    # t1 = time()
+    # print(f"LDA on 20 NG finished in {t1 - t0} seconds")
 
-    # now we'll do reuters
-    t0 = time()
-    for n_topics in [20, 50, 100]:
-        corpus = [ng_dict.doc2bow(text) for text in master_object["rt_train"]]
-        lda = LdaModel(corpus, num_topics=n_topics)
-        for ref in ["train", "test", "wiki"]:
-            key = "rt_" + ref
-            ref_corpus = master_object[key]
-            for coherence in ["c_v", "c_npmi"]:
-                for topn in [5, 10, 20]:
-                    cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=rt_dict, topn=topn)
-                    score = cm.get_coherence()
-                    row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
-                    rows.append(row)
-    t1 = time()
-    print(f"LDA on Reuters finished in {t1 - t0} seconds")
+    # # now we'll do reuters
+    # t0 = time()
+    # for n_topics in [20, 50, 100]:
+    #     corpus = [rt_dict.doc2bow(text) for text in master_object["rt_train"]]
+    #     lda = LdaModel(corpus, num_topics=n_topics)
+    #     for ref in ["train", "test", "wiki"]:
+    #         key = "rt_" + ref
+    #         ref_corpus = master_object[key]
+    #         for coherence in ["c_v", "c_npmi"]:
+    #             for topn in [5, 10, 20]:
+    #                 cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=rt_dict, topn=topn)
+    #                 score = cm.get_coherence()
+    #                 row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
+    #                 rows.append(row)
+    # t1 = time()
+    # print(f"LDA on Reuters finished in {t1 - t0} seconds")
 
-
+    f = open("results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
     for network in os.listdir("./networks"):
@@ -117,24 +117,6 @@ def main():
             else:
                 dictionary = rt_dict
 
-            # sort by term frequency
-            for comm in partition:
-                comm.sort(key=lambda node: community_utils.get_term_frequency(node, dictionary), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
-
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},term_freq,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
 
             # sort by degree
             for comm in partition:
@@ -143,7 +125,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
@@ -151,9 +133,8 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},degree,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
+
 
             # sort by weighted degree
             for comm in partition:
@@ -162,7 +143,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
@@ -170,9 +151,7 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_degree,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
 
             # sort by internal degree
             for comm in partition:
@@ -182,7 +161,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
@@ -190,9 +169,7 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_degree,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
 
             # sort by internal weighted degree
             for comm in partition:
@@ -202,7 +179,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
@@ -210,9 +187,7 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_weighted_degree,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
 
             # sort by embeddedness
             for comm in partition:
@@ -222,7 +197,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
@@ -230,9 +205,7 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},embeddedness,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
 
             # sort by weighted embeddedness
             for comm in partition:
@@ -250,13 +223,9 @@ def main():
                         cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_embeddedness,{coherence},{topn},{score}"
-                        rows.append(row)
-                        if len(rows) % 100 == 0:
-                            print(len(rows))
+                        f.write(row + "\n")
 
-    with open("results0.csv", "w") as f:
-        f.write("\n".join(rows))
-
+    f.close()
 
 if __name__ == "__main__":
     main()
