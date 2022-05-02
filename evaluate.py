@@ -130,7 +130,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},degree,{coherence},{topn},{score}"
                         f.write(row + "\n")
@@ -148,7 +148,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_degree,{coherence},{topn},{score}"
                         f.write(row + "\n")
@@ -166,7 +166,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_degree,{coherence},{topn},{score}"
                         f.write(row + "\n")
@@ -184,7 +184,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_weighted_degree,{coherence},{topn},{score}"
                         f.write(row + "\n")
@@ -202,7 +202,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},embeddedness,{coherence},{topn},{score}"
                         f.write(row + "\n")
@@ -220,7 +220,7 @@ def main():
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
                     for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn)
+                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_embeddedness,{coherence},{topn},{score}"
                         f.write(row + "\n")
