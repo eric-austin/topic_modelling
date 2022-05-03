@@ -28,7 +28,7 @@ def main():
         ref_corpus = master_object[key]
         for coherence in ["c_v", "c_npmi"]:
             for topn in [5, 10, 20]:
-                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=ng_dict, topn=topn)
+                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=ng_dict, topn=topn, coherence=coherence)
                 score = cm.get_coherence()
                 row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
@@ -45,7 +45,7 @@ def main():
         ref_corpus = master_object[key]
         for coherence in ["c_v", "c_npmi"]:
             for topn in [5, 10, 20]:
-                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn)
+                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
                 score = cm.get_coherence()
                 row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
