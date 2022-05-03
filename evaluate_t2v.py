@@ -47,7 +47,7 @@ def main():
             for topn in [5, 10, 20]:
                 cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
                 score = cm.get_coherence()
-                row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,na,na,na,na,na,{coherence},{topn},{score}"
+                row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
     t1 = time()
     print(f"t2v on Reuters finished in {t1 - t0} seconds")
