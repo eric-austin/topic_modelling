@@ -23,7 +23,7 @@ def main():
     corpus = [" ".join(text) for text in master_object["ng_train"]]
     t2v = Top2Vec(corpus, speed="learn")
     topic_words, _, _ = t2v.get_topics()
-    for ref in ["train", "test", "wiki"]:
+    for ref in ["test"]:
         key = "ng_" + ref
         ref_corpus = master_object[key]
         for coherence in ["c_v", "c_npmi"]:
@@ -40,7 +40,7 @@ def main():
     corpus = [" ".join(text) for text in master_object["rt_train"]]
     t2v = Top2Vec(corpus, speed="learn")
     topic_words, _, _ = t2v.get_topics()
-    for ref in ["train", "test", "wiki"]:
+    for ref in ["test"]:
         key = "rt_" + ref
         ref_corpus = master_object[key]
         for coherence in ["c_v", "c_npmi"]:
