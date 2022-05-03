@@ -5,7 +5,7 @@ import igraph as ig
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.models import LdaModel
 from time import time
-# from top2vec import Top2Vec
+
 
 import community_utils
 
@@ -58,10 +58,10 @@ def main():
     # t1 = time()
     # print(f"LDA on Reuters finished in {t1 - t0} seconds")
 
-    f = open("results.csv", "a")
+    f = open("missed_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./networks"):
+    for network in os.listdir("./missed_networks"):
         # break up filename to grab params for network generation
         details = network.split("_")
         train_data = details[0]
@@ -215,7 +215,7 @@ def main():
             topics = [[dictionary[node] for node in comm] for comm in partition]
 
             # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["train", "test", "wiki"]:
+            for ref in ["test"]:
                 key = train_data + "_" + ref
                 ref_corpus = master_object[key]
                 for coherence in ["c_v", "c_npmi"]:
