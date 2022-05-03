@@ -3,6 +3,7 @@ import pickle
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.models import LdaModel
 from time import time
+import numpy as np
 
 def main():
     ner = "1"
@@ -30,6 +31,7 @@ def main():
             for coherence in ["c_v", "c_npmi"]:
                 for topn in [5, 10, 20]:
                     cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=ng_dict, topn=topn, coherence=coherence)
+                    print(cm.get_coherence_per_topic())
                     score = cm.get_coherence()
                     row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
                     f.write(row + "\n")
@@ -47,6 +49,7 @@ def main():
             for coherence in ["c_v", "c_npmi"]:
                 for topn in [5, 10, 20]:
                     cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
+                    print(cm.get_coherence_per_topic())
                     score = cm.get_coherence()
                     row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
                     f.write(row + "\n")

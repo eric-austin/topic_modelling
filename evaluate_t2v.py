@@ -29,6 +29,7 @@ def main():
         for coherence in ["c_v", "c_npmi"]:
             for topn in [5, 10, 20]:
                 cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=ng_dict, topn=topn, coherence=coherence)
+                print(cm.get_coherence_per_topic())
                 score = cm.get_coherence()
                 row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
@@ -46,6 +47,7 @@ def main():
         for coherence in ["c_v", "c_npmi"]:
             for topn in [5, 10, 20]:
                 cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
+                print(cm.get_coherence_per_topic())
                 score = cm.get_coherence()
                 row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
