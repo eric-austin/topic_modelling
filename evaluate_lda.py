@@ -24,7 +24,7 @@ def main():
     for n_topics in [20, 50, 100]:
         corpus = [ng_dict.doc2bow(text) for text in master_object["ng_train"]]
         lda = LdaModel(corpus, num_topics=n_topics)
-        for ref in ["test"]:
+        for ref in ["test", "train"]:
             key = "ng_" + ref
             ref_corpus = master_object[key]
             for coherence in ["c_v", "c_npmi"]:
@@ -41,7 +41,7 @@ def main():
     for n_topics in [20, 50, 100]:
         corpus = [rt_dict.doc2bow(text) for text in master_object["rt_train"]]
         lda = LdaModel(corpus, num_topics=n_topics)
-        for ref in ["test"]:
+        for ref in ["test", "train"]:
             key = "rt_" + ref
             ref_corpus = master_object[key]
             for coherence in ["c_v", "c_npmi"]:
