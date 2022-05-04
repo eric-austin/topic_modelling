@@ -156,8 +156,8 @@ tokenized_bbc_test_docs = list(preprocessing.tokenize_docs(bbc_test_docs, lowerc
 # del newsgroups_test_docs
 # del reuters_train_docs
 # del reuters_test_docs
-del bbc_train
-del bbc_test
+del bbc_train_docs
+del bbc_test_docs
 # del wiki_text_docs
 
 # detect and apply phrases if selected
