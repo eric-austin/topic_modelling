@@ -15,53 +15,16 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./master_object.obj", "rb") as f:
+    with open("./rt_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
-    ng_dict = master_object["ng_dict"]
-    rt_dict = master_object["rt_dic"]
+    # ng_dict = master_object["ng_dict"]
+    rt_dict = master_object["rt_dict"]
 
-    # rows = []
-
-    # # first lets evaluate LDA
-    # # let's use 20NG first
-    # t0 = time()
-    # for n_topics in [20, 50, 100]:
-    #     corpus = [ng_dict.doc2bow(text) for text in master_object["ng_train"]]
-    #     lda = LdaModel(corpus, num_topics=n_topics)
-    #     for ref in ["train", "test", "wiki"]:
-    #         key = "ng_" + ref
-    #         ref_corpus = master_object[key]
-    #         for coherence in ["c_v", "c_npmi"]:
-    #             for topn in [5, 10, 20]:
-    #                 cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=ng_dict, topn=topn)
-    #                 score = cm.get_coherence()
-    #                 row = f"ng,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
-    #                 rows.append(row)
-    # t1 = time()
-    # print(f"LDA on 20 NG finished in {t1 - t0} seconds")
-
-    # # now we'll do reuters
-    # t0 = time()
-    # for n_topics in [20, 50, 100]:
-    #     corpus = [rt_dict.doc2bow(text) for text in master_object["rt_train"]]
-    #     lda = LdaModel(corpus, num_topics=n_topics)
-    #     for ref in ["train", "test", "wiki"]:
-    #         key = "rt_" + ref
-    #         ref_corpus = master_object[key]
-    #         for coherence in ["c_v", "c_npmi"]:
-    #             for topn in [5, 10, 20]:
-    #                 cm = CoherenceModel(model=lda, texts=ref_corpus, dictionary=rt_dict, topn=topn)
-    #                 score = cm.get_coherence()
-    #                 row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},lda,{n_topics},na,na,na,na,{coherence},{topn},{score}"
-    #                 rows.append(row)
-    # t1 = time()
-    # print(f"LDA on Reuters finished in {t1 - t0} seconds")
-
-    f = open("missed_results.csv", "a")
+    f = open("rt_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./missed_networks"):
+    for network in os.listdir("./rt_networks"):
         # break up filename to grab params for network generation
         details = network.split("_")
         train_data = details[0]
@@ -70,14 +33,14 @@ def main():
         weight_threshold = details[3][:-4]
 
         # each network will have two associated siwo community partitions
-        siwo_a = community_utils.read_siwo_comms(f"./siwo_comms/a_{network}")
-        siwo_g = community_utils.read_siwo_comms(f"./siwo_comms/g_{network}")
+        siwo_a = community_utils.read_siwo_comms(f"./rt_siwo_comms/a_{network}")
+        siwo_g = community_utils.read_siwo_comms(f"./rt_siwo_comms/g_{network}")
         # filter small comms
         siwo_a = [comm for comm in siwo_a if len(comm) > 2]
         siwo_g = [comm for comm in siwo_g if len(comm) > 2]
 
         # load network
-        nx_g = nx.read_weighted_edgelist(f"./networks/{network}")
+        nx_g = nx.read_weighted_edgelist(f"./rt_networks/{network}")
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
@@ -112,10 +75,7 @@ def main():
         # will evaluate each with different term ranking functions
         for alg_param, partition in alg_params:
             # need the right dictionary
-            if train_data == "ng":
-                dictionary = ng_dict
-            else:
-                dictionary = rt_dict
+            dictionary = rt_dict
 
 
             # sort by degree
