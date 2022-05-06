@@ -15,16 +15,16 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./ng2_master_object.obj", "rb") as f:
+    with open("./ng1_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     ng_dict = master_object["ng_dict"]
     # bbc_dict = master_object["bbc_dict"]
 
-    f = open("ng2_results.csv", "a")
+    f = open("ng1_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./ng2_networks"):
+    for network in os.listdir("./ng1_networks"):
         # break up filename to grab params for network generation
         details = network.split("_")
         train_data = details[0]
@@ -33,14 +33,14 @@ def main():
         weight_threshold = details[3][:-4]
 
         # each network will have two associated siwo community partitions
-        siwo_a = community_utils.read_siwo_comms(f"./ng2_siwo_comms/a_{network}")
-        siwo_g = community_utils.read_siwo_comms(f"./ng2_siwo_comms/g_{network}")
+        siwo_a = community_utils.read_siwo_comms(f"./ng1_siwo_comms/a_{network}")
+        siwo_g = community_utils.read_siwo_comms(f"./ng1_siwo_comms/g_{network}")
         # filter small comms
         siwo_a = [comm for comm in siwo_a if len(comm) > 2]
         siwo_g = [comm for comm in siwo_g if len(comm) > 2]
 
         # load network
-        nx_g = nx.read_weighted_edgelist(f"./ng2_networks/{network}")
+        nx_g = nx.read_weighted_edgelist(f"./ng1_networks/{network}")
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
