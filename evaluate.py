@@ -21,11 +21,12 @@ def main():
     ng_dict = master_object["ng_dict"]
     # bbc_dict = master_object["bbc_dict"]
 
-    f = open("ng1_results.csv", "a")
+    # f = open("ng1_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
     for network in os.listdir("./ng1_networks"):
         t0 = time()
+        f = open(f"ng1_results_{network}.csv", "a")
         # break up filename to grab params for network generation
         details = network.split("_")
         train_data = details[0]
@@ -187,8 +188,8 @@ def main():
                         f.write(row + "\n")
         t1 = time()
         print(f"{t1 - t0} seconds", network)
+        f.close()
 
-    f.close()
 
 if __name__ == "__main__":
     main()
