@@ -310,14 +310,14 @@ ng_window10_nb = network_creation.WindowNetworkBuilder(tokenized_ng_train_sents,
 #                                                      10)
 
 for t in [0, 2]:
-    ng_sentence_nb.save_network(f"./ng3_networks/ng_sentence_count_{t}.txt", type="default", threshold=t)
-    ng_window5_nb.save_network(f"./ng3_networks/ng_window5_count_{t}.txt", type="default", threshold=t)
-    ng_window10_nb.save_network(f"./ng3_networks/ng_window10_count_{t}.txt", type="default", threshold=t)
+    ng_sentence_nb.save_network(f"./ng1_networks/ng_sentence_count_{t}.txt", type="default", threshold=t)
+    ng_window5_nb.save_network(f"./ng1_networks/ng_window5_count_{t}.txt", type="default", threshold=t)
+    ng_window10_nb.save_network(f"./ng1_networks/ng_window10_count_{t}.txt", type="default", threshold=t)
 
 for t in [0.0, 0.35]:
-    ng_sentence_nb.save_network(f"./ng3_networks/ng_sentence_npmi_{t}.txt", type="npmi", threshold=t)
-    ng_window5_nb.save_network(f"./ng3_networks/ng_window5_npmi_{t}.txt", type="npmi", threshold=t)
-    ng_window10_nb.save_network(f"./ng3_networks/ng_window10_npmi_{t}.txt", type="npmi", threshold=t)
+    ng_sentence_nb.save_network(f"./ng1_networks/ng_sentence_npmi_{t}.txt", type="npmi", threshold=t)
+    ng_window5_nb.save_network(f"./ng1_networks/ng_window5_npmi_{t}.txt", type="npmi", threshold=t)
+    ng_window10_nb.save_network(f"./ng1_networks/ng_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
 # for t in [0, 2]:
 #     rt_sentence_nb.save_network(f"./rt_networks/rt_sentence_count_{t}.txt", type="default", threshold=t)
@@ -356,5 +356,5 @@ master_object["ng_dict"] = ng_dictionary
 # master_object["bbc_test"] = tokenized_bbc_test_docs
 # master_object["bbc_dict"] = bbc_dictionary
 
-with open("./ng3_master_object.obj", "wb") as f:
+with open("./ng1_master_object.obj", "wb") as f:
     pickle.dump(master_object, f)
