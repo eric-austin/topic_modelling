@@ -25,6 +25,7 @@ def main():
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
     for network in os.listdir("./ng1_networks"):
+        t0 = time()
         # break up filename to grab params for network generation
         details = network.split("_")
         train_data = details[0]
@@ -184,6 +185,8 @@ def main():
                         score = cm.get_coherence()
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_embeddedness,{coherence},{topn},{score}"
                         f.write(row + "\n")
+        t1 = time()
+        print(f"{t1 - t0} seconds", network)
 
     f.close()
 
