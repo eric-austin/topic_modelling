@@ -170,7 +170,7 @@ if not (args.phrases == "none"):
     #                                                   threshold=args.phrase_threshold,
     #                                                   min_count=None)
 
-    rt_phrases, rt_train_docs, rt_phrase_models = preprocessing.detect_phrases(tokenized_rt_train_docs,
+    rt_phrases, tokenized_rt_train_docs, rt_phrase_models = preprocessing.detect_phrases(tokenized_rt_train_docs,
                                                       num_iterations=2,
                                                       scoring_method=args.phrases,
                                                       threshold=args.phrase_threshold,
