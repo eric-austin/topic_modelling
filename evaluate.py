@@ -189,7 +189,7 @@ def main():
                         f.write(row + "\n")
         t1 = time()
         print(f"{t1 - t0} seconds", network)
-
+    f.close()
 
 
 if __name__ == "__main__":
