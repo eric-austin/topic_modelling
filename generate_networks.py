@@ -255,6 +255,13 @@ rt_vocab, rt_dictionary = preprocessing.create_vocabulary_and_dictionary(tokeniz
 tokenized_rt_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_sents, rt_vocab)
 tokenized_rt_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_docs, rt_vocab)
 tokenized_rt_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_test_docs, rt_vocab)
+test_vocab = set()
+for doc in tokenized_rt_test_docs:
+    for token in doc:
+        test_vocab.add(token)
+tokenized_rt_train_docs = [[token for token in doc if token in test_vocab] for doc in tokenized_rt_train_docs]
+tokenized_rt_train_sents = [[token for token in sent if token in test_vocab] for sent in tokenized_rt_train_sents]
+
 # tokenized_wiki_rt_drts = preprocessing.filter_tokenized_docs_with_vocab(tokenized_wiki_rt_docs, rt_vocab)
 
 # bbc_vocab, bbc_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_bbc_train_docs, min_threshold=None)
