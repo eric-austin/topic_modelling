@@ -25,7 +25,7 @@ def main():
     f = open("rt1_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./ng1_networks"):
+    for network in os.listdir("./rt1_networks"):
         t0 = time()
         # f = open(f"ng1_results_{network}.csv", "a")
         # break up filename to grab params for network generation
