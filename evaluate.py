@@ -43,7 +43,7 @@ def main():
         siwo_g = [comm for comm in siwo_g if len(comm) > 2]
 
         # load network
-        nx_g = nx.read_weighted_edgelist(f"./rt1_networks/{network}")
+        nx_g = nx.read_weighted_edgelist(f"./rt2_networks/{network}")
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
