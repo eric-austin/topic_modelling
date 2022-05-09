@@ -33,10 +33,10 @@ print(args)
 # with open("./text_datasets/20newsgroups_test.txt", "r") as f:
 #     newsgroups_test = f.read().split("\n")
 
-with open("./text_datasets/reuters_train.txt", "r") as f:
-    reuters_train = f.read().split("\n")
-with open("./text_datasets/reuters_test.txt", "r") as f:
-    reuters_test = f.read().split("\n")
+# with open("./text_datasets/reuters_train.txt", "r") as f:
+#     reuters_train = f.read().split("\n")
+# with open("./text_datasets/reuters_test.txt", "r") as f:
+#     reuters_test = f.read().split("\n")
 
 # reuters = reuters_train + reuters_test
 # random.Random(4).shuffle(reuters)
@@ -47,10 +47,10 @@ with open("./text_datasets/reuters_test.txt", "r") as f:
 # with open("./text_datasets/wikitext.txt", "r") as f:
 #     wiki_text = f.read().split('\n')
 
-# with open("./text_datasets/bbc_train.txt", "r") as f:
-#     bbc_train = f.read().split("\n")
-# with open("./text_datasets/bbc_test.txt", "r") as f:
-#     bbc_test = f.read().split("\n")
+with open("./text_datasets/bbc_train.txt", "r") as f:
+    bbc_train = f.read().split("\n")
+with open("./text_datasets/bbc_test.txt", "r") as f:
+    bbc_test = f.read().split("\n")
 
 # need to specify entity types for NER
 ent_types = ["EVENT", "FAC", "GPE", "LOC", "ORG", "PERSON", "PRODUCT", "WORK_OF_ART"]
@@ -101,25 +101,25 @@ nlp = preprocessing.create_pipeline(detect_sentences=True,
 # t1 = time()
 # print(f"20 NG test processed in {t1 - t0} seconds")
 
-t0 = time()
-reuters_train_docs = list(nlp.pipe(reuters_train))
-t1 = time()
-print(f"Reuters train processed in {t1 - t0} seconds")
-
-t0 = time()
-reuters_test_docs = list(nlp.pipe(reuters_test))
-t1 = time()
-print(f"Reuters test processed in {t1 - t0} seconds")
+# t0 = time()
+# reuters_train_docs = list(nlp.pipe(reuters_train))
+# t1 = time()
+# print(f"Reuters train processed in {t1 - t0} seconds")
 
 # t0 = time()
-# bbc_train_docs = list(nlp.pipe(bbc_train))
+# reuters_test_docs = list(nlp.pipe(reuters_test))
 # t1 = time()
-# print(f"BBC train processed in {t1 - t0} seconds")
+# print(f"Reuters test processed in {t1 - t0} seconds")
 
-# t0 = time()
-# bbc_test_docs = list(nlp.pipe(bbc_test))
-# t1 = time()
-# print(f"BBC test processed in {t1 - t0} seconds")
+t0 = time()
+bbc_train_docs = list(nlp.pipe(bbc_train))
+t1 = time()
+print(f"BBC train processed in {t1 - t0} seconds")
+
+t0 = time()
+bbc_test_docs = list(nlp.pipe(bbc_test))
+t1 = time()
+print(f"BBC test processed in {t1 - t0} seconds")
 
 # t0 = time()
 # wiki_text_docs = list(nlp.pipe(wiki_text))
@@ -142,13 +142,13 @@ print("NLP pipeline done.")
 # tokenized_ng_train_sents = list(preprocessing.tokenize_docs(newsgroups_train_docs, lowercase=True, sentences=True))
 # tokenized_ng_test_docs = list(preprocessing.tokenize_docs(newsgroups_test_docs, lowercase=True, sentences=False))
 
-tokenized_rt_train_docs = list(preprocessing.tokenize_docs(reuters_train_docs, lowercase=True, sentences=False))
-tokenized_rt_train_sents = list(preprocessing.tokenize_docs(reuters_train_docs, lowercase=True, sentences=True))
-tokenized_rt_test_docs = list(preprocessing.tokenize_docs(reuters_test_docs, lowercase=True, sentences=False))
+# tokenized_rt_train_docs = list(preprocessing.tokenize_docs(reuters_train_docs, lowercase=True, sentences=False))
+# tokenized_rt_train_sents = list(preprocessing.tokenize_docs(reuters_train_docs, lowercase=True, sentences=True))
+# tokenized_rt_test_docs = list(preprocessing.tokenize_docs(reuters_test_docs, lowercase=True, sentences=False))
 
-# tokenized_bbc_train_docs = list(preprocessing.tokenize_docs(bbc_train_docs, lowercase=True, sentences=False))
-# tokenized_bbc_train_sents = list(preprocessing.tokenize_docs(bbc_train_docs, lowercase=True, sentences=True))
-# tokenized_bbc_test_docs = list(preprocessing.tokenize_docs(bbc_test_docs, lowercase=True, sentences=False))
+tokenized_bbc_train_docs = list(preprocessing.tokenize_docs(bbc_train_docs, lowercase=True, sentences=False))
+tokenized_bbc_train_sents = list(preprocessing.tokenize_docs(bbc_train_docs, lowercase=True, sentences=True))
+tokenized_bbc_test_docs = list(preprocessing.tokenize_docs(bbc_test_docs, lowercase=True, sentences=False))
 
 # tokenized_wiki_docs = list(preprocessing.tokenize_docs(wiki_text_docs, lowercase=True, sentences=False))
 
@@ -170,17 +170,17 @@ if not (args.phrases == "none"):
     #                                                   threshold=args.phrase_threshold,
     #                                                   min_count=None)
 
-    rt_phrases, tokenized_rt_train_docs, rt_phrase_models = preprocessing.detect_phrases(tokenized_rt_train_docs,
-                                                      num_iterations=2,
-                                                      scoring_method=args.phrases,
-                                                      threshold=args.phrase_threshold,
-                                                      min_count=None)
-
-    # bbc_phrases, bbc_train_docs, bbc_phrase_models = preprocessing.detect_phrases(tokenized_bbc_train_docs,
+    # rt_phrases, tokenized_rt_train_docs, rt_phrase_models = preprocessing.detect_phrases(tokenized_rt_train_docs,
     #                                                   num_iterations=2,
     #                                                   scoring_method=args.phrases,
     #                                                   threshold=args.phrase_threshold,
     #                                                   min_count=None)
+
+    bbc_phrases, tokenized_bbc_train_docs, bbc_phrase_models = preprocessing.detect_phrases(tokenized_bbc_train_docs,
+                                                      num_iterations=2,
+                                                      scoring_method=args.phrases,
+                                                      threshold=args.phrase_threshold,
+                                                      min_count=None)
 
     # apply phrases to sentences and test docs as well
     # for model in ng_phrase_models:
@@ -196,21 +196,21 @@ if not (args.phrases == "none"):
     #     tokenized_wiki_ng_docs = model[tokenized_wiki_ng_docs]
     # tokenized_wiki_ng_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_wiki_ng_docs]
 
-    for model in rt_phrase_models:
-        tokenized_rt_train_sents = model[tokenized_rt_train_sents]
-    tokenized_rt_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_rt_train_sents]
+    # for model in rt_phrase_models:
+    #     tokenized_rt_train_sents = model[tokenized_rt_train_sents]
+    # tokenized_rt_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_rt_train_sents]
 
-    for model in rt_phrase_models:
-        tokenized_rt_test_docs = model[tokenized_rt_test_docs]
-    tokenized_rt_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_test_docs]
+    # for model in rt_phrase_models:
+    #     tokenized_rt_test_docs = model[tokenized_rt_test_docs]
+    # tokenized_rt_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_test_docs]
 
-    # for model in bbc_phrase_models:
-    #     tokenized_bbc_train_sents = model[tokenized_bbc_train_sents]
-    # tokenized_bbc_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_bbc_train_sents]
+    for model in bbc_phrase_models:
+        tokenized_bbc_train_sents = model[tokenized_bbc_train_sents]
+    tokenized_bbc_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_bbc_train_sents]
 
-    # for model in bbc_phrase_models:
-    #     tokenized_bbc_test_docs = model[tokenized_bbc_test_docs]
-    # tokenized_bbc_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_test_docs]
+    for model in bbc_phrase_models:
+        tokenized_bbc_test_docs = model[tokenized_bbc_test_docs]
+    tokenized_bbc_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_test_docs]
 
     # tokenized_wiki_rt_docs = deepcopy(tokenized_wiki_docs)
     # for model in rt_phrase_models:
@@ -226,13 +226,13 @@ else:
     # tokenized_ng_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_ng_train_sents]
     # tokenized_ng_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_ng_test_docs]
 
-    tokenized_rt_train_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_train_docs]
-    tokenized_rt_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_rt_train_sents]
-    tokenized_rt_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_test_docs]
+    # tokenized_rt_train_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_train_docs]
+    # tokenized_rt_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_rt_train_sents]
+    # tokenized_rt_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_rt_test_docs]
 
-    # tokenized_bbc_train_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_train_docs]
-    # tokenized_bbc_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_bbc_train_sents]
-    # tokenized_bbc_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_test_docs]
+    tokenized_bbc_train_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_train_docs]
+    tokenized_bbc_train_sents = [[token.replace(" ", "_") for token in sent] for sent in tokenized_bbc_train_sents]
+    tokenized_bbc_test_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_bbc_test_docs]
 
     # tokenized_wiki_ng_docs = deepcopy(tokenized_wiki_docs)
     # tokenized_wiki_ng_docs = [[token.replace(" ", "_") for token in doc] for doc in tokenized_wiki_ng_docs]
@@ -251,23 +251,29 @@ t0 = time()
 # tokenized_ng_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_ng_test_docs, ng_vocab)
 # tokenized_wiki_ng_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_wiki_ng_docs, ng_vocab)
 
-rt_vocab, rt_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_rt_train_docs, min_threshold=None)
-tokenized_rt_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_sents, rt_vocab)
-tokenized_rt_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_docs, rt_vocab)
-tokenized_rt_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_test_docs, rt_vocab)
-test_vocab = set()
-for doc in tokenized_rt_test_docs:
-    for token in doc:
-        test_vocab.add(token)
-tokenized_rt_train_docs = [[token for token in doc if token in test_vocab] for doc in tokenized_rt_train_docs]
-tokenized_rt_train_sents = [[token for token in sent if token in test_vocab] for sent in tokenized_rt_train_sents]
+# rt_vocab, rt_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_rt_train_docs, min_threshold=None)
+# tokenized_rt_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_sents, rt_vocab)
+# tokenized_rt_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_train_docs, rt_vocab)
+# tokenized_rt_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_rt_test_docs, rt_vocab)
+# test_vocab = set()
+# for doc in tokenized_rt_test_docs:
+#     for token in doc:
+#         test_vocab.add(token)
+# tokenized_rt_train_docs = [[token for token in doc if token in test_vocab] for doc in tokenized_rt_train_docs]
+# tokenized_rt_train_sents = [[token for token in sent if token in test_vocab] for sent in tokenized_rt_train_sents]
 
 # tokenized_wiki_rt_drts = preprocessing.filter_tokenized_docs_with_vocab(tokenized_wiki_rt_docs, rt_vocab)
 
-# bbc_vocab, bbc_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_bbc_train_docs, min_threshold=None)
-# tokenized_bbc_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_train_sents, bbc_vocab)
-# tokenized_bbc_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_train_docs, bbc_vocab)
-# tokenized_bbc_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_test_docs, bbc_vocab)
+bbc_vocab, bbc_dictionary = preprocessing.create_vocabulary_and_dictionary(tokenized_bbc_train_docs, min_threshold=None)
+tokenized_bbc_train_sents = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_train_sents, bbc_vocab)
+tokenized_bbc_train_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_train_docs, bbc_vocab)
+tokenized_bbc_test_docs = preprocessing.filter_tokenized_docs_with_vocab(tokenized_bbc_test_docs, bbc_vocab)
+test_vocab = set()
+for doc in tokenized_bbc_test_docs:
+    for token in doc:
+        test_vocab.add(token)
+tokenized_bbc_train_docs = [[token for token in doc if token in test_vocab] for doc in tokenized_bbc_train_docs]
+tokenized_bbc_train_sents = [[token for token in sent if token in test_vocab] for sent in tokenized_bbc_train_sents]
 
 # filter out empty docs and sentences
 # tokenized_ng_train_sents = [sent for sent in tokenized_ng_train_sents if len(sent) > 0]
@@ -275,14 +281,14 @@ tokenized_rt_train_sents = [[token for token in sent if token in test_vocab] for
 # tokenized_ng_test_docs = [doc for doc in tokenized_ng_test_docs if len(doc) > 0]
 # tokenized_wiki_ng_docs = [doc for doc in tokenized_wiki_ng_docs if len(doc) > 0]
 
-tokenized_rt_train_sents = [sent for sent in tokenized_rt_train_sents if len(sent) > 0]
-tokenized_rt_train_docs = [doc for doc in tokenized_rt_train_docs if len(doc) > 0]
-tokenized_rt_test_docs = [doc for doc in tokenized_rt_test_docs if len(doc) > 0]
+# tokenized_rt_train_sents = [sent for sent in tokenized_rt_train_sents if len(sent) > 0]
+# tokenized_rt_train_docs = [doc for doc in tokenized_rt_train_docs if len(doc) > 0]
+# tokenized_rt_test_docs = [doc for doc in tokenized_rt_test_docs if len(doc) > 0]
 # tokenized_wiki_rt_docs = [doc for doc in tokenized_wiki_rt_docs if len(doc) > 0]
 
-# tokenized_bbc_train_sents = [sent for sent in tokenized_bbc_train_sents if len(sent) > 0]
-# tokenized_bbc_train_docs = [doc for doc in tokenized_bbc_train_docs if len(doc) > 0]
-# tokenized_bbc_test_docs = [doc for doc in tokenized_bbc_test_docs if len(doc) > 0]
+tokenized_bbc_train_sents = [sent for sent in tokenized_bbc_train_sents if len(sent) > 0]
+tokenized_bbc_train_docs = [doc for doc in tokenized_bbc_train_docs if len(doc) > 0]
+tokenized_bbc_test_docs = [doc for doc in tokenized_bbc_test_docs if len(doc) > 0]
 
 t1 = time()
 print(f"Vocabulary created and docs filtered in {t1 - t0} seconds")
@@ -298,23 +304,23 @@ t0 = time()
 #                                                      ng_dictionary, 
 #                                                      10)
 
-rt_sentence_nb = network_creation.SentenceNetworkBuilder(tokenized_rt_train_sents, 
-                                                         rt_dictionary)
-rt_window5_nb = network_creation.WindowNetworkBuilder(tokenized_rt_train_sents, 
-                                                     rt_dictionary, 
-                                                     5)
-rt_window10_nb = network_creation.WindowNetworkBuilder(tokenized_rt_train_sents, 
-                                                     rt_dictionary, 
-                                                     10)
-
-# bbc_sentence_nb = network_creation.SentenceNetworkBuilder(tokenized_bbc_train_sents, 
-#                                                          bbc_dictionary)
-# bbc_window5_nb = network_creation.WindowNetworkBuilder(tokenized_bbc_train_sents, 
-#                                                      bbc_dictionary, 
+# rt_sentence_nb = network_creation.SentenceNetworkBuilder(tokenized_rt_train_sents, 
+#                                                          rt_dictionary)
+# rt_window5_nb = network_creation.WindowNetworkBuilder(tokenized_rt_train_sents, 
+#                                                      rt_dictionary, 
 #                                                      5)
-# bbc_window10_nb = network_creation.WindowNetworkBuilder(tokenized_bbc_train_sents, 
-#                                                      bbc_dictionary, 
+# rt_window10_nb = network_creation.WindowNetworkBuilder(tokenized_rt_train_sents, 
+#                                                      rt_dictionary, 
 #                                                      10)
+
+bbc_sentence_nb = network_creation.SentenceNetworkBuilder(tokenized_bbc_train_sents, 
+                                                         bbc_dictionary)
+bbc_window5_nb = network_creation.WindowNetworkBuilder(tokenized_bbc_train_sents, 
+                                                     bbc_dictionary, 
+                                                     5)
+bbc_window10_nb = network_creation.WindowNetworkBuilder(tokenized_bbc_train_sents, 
+                                                     bbc_dictionary, 
+                                                     10)
 
 # for t in [0, 2]:
 #     ng_sentence_nb.save_network(f"./ng1_networks/ng_sentence_count_{t}.txt", type="default", threshold=t)
@@ -326,25 +332,25 @@ rt_window10_nb = network_creation.WindowNetworkBuilder(tokenized_rt_train_sents,
 #     ng_window5_nb.save_network(f"./ng1_networks/ng_window5_npmi_{t}.txt", type="npmi", threshold=t)
 #     ng_window10_nb.save_network(f"./ng1_networks/ng_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
-for t in [0, 2]:
-    rt_sentence_nb.save_network(f"./rt2_networks/rt_sentence_count_{t}.txt", type="default", threshold=t)
-    rt_window5_nb.save_network(f"./rt2_networks/rt_window5_count_{t}.txt", type="default", threshold=t)
-    rt_window10_nb.save_network(f"./rt2_networks/rt_window10_count_{t}.txt", type="default", threshold=t)
-
-for t in [0.0, 0.35]:
-    rt_sentence_nb.save_network(f"./rt2_networks/rt_sentence_npmi_{t}.txt", type="npmi", threshold=t)
-    rt_window5_nb.save_network(f"./rt2_networks/rt_window5_npmi_{t}.txt", type="npmi", threshold=t)
-    rt_window10_nb.save_network(f"./rt2_networks/rt_window10_npmi_{t}.txt", type="npmi", threshold=t)
-
 # for t in [0, 2]:
-#     bbc_sentence_nb.save_network(f"./bbc_networks/bbc_sentence_count_{t}.txt", type="default", threshold=t)
-#     bbc_window5_nb.save_network(f"./bbc_networks/bbc_window5_count_{t}.txt", type="default", threshold=t)
-#     bbc_window10_nb.save_network(f"./bbc_networks/bbc_window10_count_{t}.txt", type="default", threshold=t)
+#     rt_sentence_nb.save_network(f"./rt2_networks/rt_sentence_count_{t}.txt", type="default", threshold=t)
+#     rt_window5_nb.save_network(f"./rt2_networks/rt_window5_count_{t}.txt", type="default", threshold=t)
+#     rt_window10_nb.save_network(f"./rt2_networks/rt_window10_count_{t}.txt", type="default", threshold=t)
 
 # for t in [0.0, 0.35]:
-#     bbc_sentence_nb.save_network(f"./bbc_networks/bbc_sentence_npmi_{t}.txt", type="npmi", threshold=t)
-#     bbc_window5_nb.save_network(f"./bbc_networks/bbc_window5_npmi_{t}.txt", type="npmi", threshold=t)
-#     bbc_window10_nb.save_network(f"./bbc_networks/bbc_window10_npmi_{t}.txt", type="npmi", threshold=t)
+#     rt_sentence_nb.save_network(f"./rt2_networks/rt_sentence_npmi_{t}.txt", type="npmi", threshold=t)
+#     rt_window5_nb.save_network(f"./rt2_networks/rt_window5_npmi_{t}.txt", type="npmi", threshold=t)
+#     rt_window10_nb.save_network(f"./rt2_networks/rt_window10_npmi_{t}.txt", type="npmi", threshold=t)
+
+for t in [0, 2]:
+    bbc_sentence_nb.save_network(f"./bbc1_networks/bbc_sentence_count_{t}.txt", type="default", threshold=t)
+    bbc_window5_nb.save_network(f"./bbc1_networks/bbc_window5_count_{t}.txt", type="default", threshold=t)
+    bbc_window10_nb.save_network(f"./bbc1_networks/bbc_window10_count_{t}.txt", type="default", threshold=t)
+
+for t in [0.0, 0.35]:
+    bbc_sentence_nb.save_network(f"./bbc1_networks/bbc_sentence_npmi_{t}.txt", type="npmi", threshold=t)
+    bbc_window5_nb.save_network(f"./bbc1_networks/bbc_window5_npmi_{t}.txt", type="npmi", threshold=t)
+    bbc_window10_nb.save_network(f"./bbc1_networks/bbc_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
 t1 = time()
 print(f"Networks generated and saved in {t1 - t0} seconds")
@@ -354,14 +360,14 @@ master_object = dict()
 # master_object["ng_train"] = tokenized_ng_train_docs
 # master_object["ng_test"] = tokenized_ng_test_docs
 # master_object["ng_wiki"] = tokenized_wiki_ng_docs
-master_object["rt_train"] = tokenized_rt_train_docs
-master_object["rt_test"] = tokenized_rt_test_docs
+# master_object["rt_train"] = tokenized_rt_train_docs
+# master_object["rt_test"] = tokenized_rt_test_docs
 # master_object["rt_wiki"] = tokenized_wiki_rt_docs
 # master_object["ng_dict"] = ng_dictionary
-master_object["rt_dict"] = rt_dictionary
-# master_object["bbc_train"] = tokenized_bbc_train_docs
-# master_object["bbc_test"] = tokenized_bbc_test_docs
-# master_object["bbc_dict"] = bbc_dictionary
+# master_object["rt_dict"] = rt_dictionary
+master_object["bbc_train"] = tokenized_bbc_train_docs
+master_object["bbc_test"] = tokenized_bbc_test_docs
+master_object["bbc_dict"] = bbc_dictionary
 
-with open("./rt2_master_object.obj", "wb") as f:
+with open("./bbc1_master_object.obj", "wb") as f:
     pickle.dump(master_object, f)
