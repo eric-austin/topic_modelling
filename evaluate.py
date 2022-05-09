@@ -11,21 +11,21 @@ import community_utils
 
 def main():
     ner = "1"
-    pos_filter = "3"
+    pos_filter = "0"
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./bbc1_master_object.obj", "rb") as f:
+    with open("./bbc2_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     # ng_dict = master_object["ng_dict"]
-    rt_dict = master_object["rt_dict"]
-    # bbc_dict = master_object["bbc_dict"]
+    # rt_dict = master_object["rt_dict"]
+    bbc_dict = master_object["bbc_dict"]
 
-    f = open("bbc1_results.csv", "a")
+    f = open("bbc2_results.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./bbc1_networks"):
+    for network in os.listdir("./bbc2_networks"):
         t0 = time()
         # f = open(f"ng1_results_{network}.csv", "a")
         # break up filename to grab params for network generation
@@ -36,14 +36,14 @@ def main():
         weight_threshold = details[3][:-4]
 
         # each network will have two associated siwo community partitions
-        siwo_a = community_utils.read_siwo_comms(f"./bbc1_siwo_comms/a_{network}")
-        siwo_g = community_utils.read_siwo_comms(f"./bbc1_siwo_comms/g_{network}")
+        siwo_a = community_utils.read_siwo_comms(f"./bbc2_siwo_comms/a_{network}")
+        siwo_g = community_utils.read_siwo_comms(f"./bbc2_siwo_comms/g_{network}")
         # filter small comms
         siwo_a = [comm for comm in siwo_a if len(comm) > 2]
         siwo_g = [comm for comm in siwo_g if len(comm) > 2]
 
         # load network
-        nx_g = nx.read_weighted_edgelist(f"./bbc1_networks/{network}")
+        nx_g = nx.read_weighted_edgelist(f"./bbc2_networks/{network}")
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
@@ -78,7 +78,7 @@ def main():
         # will evaluate each with different term ranking functions
         for alg_param, partition in alg_params:
             # need the right dictionary
-            dictionary = rt_dict
+            dictionary = bbc_dict
 
 
             # sort by degree

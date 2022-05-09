@@ -343,14 +343,14 @@ bbc_window10_nb = network_creation.WindowNetworkBuilder(tokenized_bbc_train_sent
 #     rt_window10_nb.save_network(f"./rt2_networks/rt_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
 for t in [0, 2]:
-    bbc_sentence_nb.save_network(f"./bbc1_networks/bbc_sentence_count_{t}.txt", type="default", threshold=t)
-    bbc_window5_nb.save_network(f"./bbc1_networks/bbc_window5_count_{t}.txt", type="default", threshold=t)
-    bbc_window10_nb.save_network(f"./bbc1_networks/bbc_window10_count_{t}.txt", type="default", threshold=t)
+    bbc_sentence_nb.save_network(f"./bbc2_networks/bbc_sentence_count_{t}.txt", type="default", threshold=t)
+    bbc_window5_nb.save_network(f"./bbc2_networks/bbc_window5_count_{t}.txt", type="default", threshold=t)
+    bbc_window10_nb.save_network(f"./bbc2_networks/bbc_window10_count_{t}.txt", type="default", threshold=t)
 
 for t in [0.0, 0.35]:
-    bbc_sentence_nb.save_network(f"./bbc1_networks/bbc_sentence_npmi_{t}.txt", type="npmi", threshold=t)
-    bbc_window5_nb.save_network(f"./bbc1_networks/bbc_window5_npmi_{t}.txt", type="npmi", threshold=t)
-    bbc_window10_nb.save_network(f"./bbc1_networks/bbc_window10_npmi_{t}.txt", type="npmi", threshold=t)
+    bbc_sentence_nb.save_network(f"./bbc2_networks/bbc_sentence_npmi_{t}.txt", type="npmi", threshold=t)
+    bbc_window5_nb.save_network(f"./bbc2_networks/bbc_window5_npmi_{t}.txt", type="npmi", threshold=t)
+    bbc_window10_nb.save_network(f"./bbc2_networks/bbc_window10_npmi_{t}.txt", type="npmi", threshold=t)
 
 t1 = time()
 print(f"Networks generated and saved in {t1 - t0} seconds")
@@ -369,5 +369,5 @@ master_object["bbc_train"] = tokenized_bbc_train_docs
 master_object["bbc_test"] = tokenized_bbc_test_docs
 master_object["bbc_dict"] = bbc_dictionary
 
-with open("./bbc1_master_object.obj", "wb") as f:
+with open("./bbc2_master_object.obj", "wb") as f:
     pickle.dump(master_object, f)
