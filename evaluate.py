@@ -11,7 +11,7 @@ import community_utils
 
 def main():
     ner = "1"
-    pos_filter = "3"
+    pos_filter = "0"
     phrase = "npmi"
     phrase_threshold = "0.35"
 
