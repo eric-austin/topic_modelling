@@ -8,6 +8,7 @@ import community_utils
 import network_creation
 import networkx as nx
 import igraph as ig
+import random
 
 def main():
     with open("./ng1_master_object.obj", "rb") as f:
@@ -21,6 +22,7 @@ def main():
     lda_npmis = []
 
     for i in range(10):
+        random.shuffle(corpus)
         t0 = time()
         model = LdaModel(corpus, num_topics=20, iterations=2000)
         t1 = time()
@@ -44,6 +46,7 @@ def main():
     corpus = [" ".join(text) for text in master_object["ng_train"]]
 
     for i in range(10):
+        random.shuffle(corpus)
         t0 = time()
         model = Top2Vec(corpus, speed="learn", workers=1)
         t1 = time()
