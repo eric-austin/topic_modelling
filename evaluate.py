@@ -15,17 +15,17 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./ng2_master_object.obj", "rb") as f:
+    with open("./rt1_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
-    ng_dict = master_object["ng_dict"]
-    # rt_dict = master_object["rt_dict"]
+    # ng_dict = master_object["ng_dict"]
+    rt_dict = master_object["rt_dict"]
     # bbc_dict = master_object["bbc_dict"]
 
-    f = open("ng2_results_wtleiden.csv", "a")
+    f = open("rt1_results_wtleiden.csv", "a")
     # want to go through each network, find the associated siwo communities and
     # mine the leiden communities, then evaluate all permutations
-    for network in os.listdir("./ng2_networks"):
+    for network in os.listdir("./rt1_networks"):
         t0 = time()
         # f = open(f"ng1_results_{network}.csv", "a")
         # break up filename to grab params for network generation
@@ -43,7 +43,7 @@ def main():
         # siwo_g = [comm for comm in siwo_g if len(comm) > 2]
 
         # load network
-        nx_g = nx.read_weighted_edgelist(f"./ng2_networks/{network}")
+        nx_g = nx.read_weighted_edgelist(f"./rt1_networks/{network}")
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
@@ -75,7 +75,7 @@ def main():
         # will evaluate each with different term ranking functions
         for alg_param, partition in alg_params:
             # need the right dictionary
-            dictionary = ng_dict
+            dictionary = rt_dict
 
 
             # # sort by degree
