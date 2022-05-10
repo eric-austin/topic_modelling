@@ -47,35 +47,28 @@ def main():
         ig_g = ig.Graph.from_networkx(nx_g)
 
         # use different resolution parameters for leiden
-        walktrap4 = ig_g.community_walktrap(weights='weight').as_clustering()
-        walktrap10 = ig_g.community_walktrap(weights='weight', steps=10).as_clustering()
-        leiden_1 = ig_g.community_leiden(weights='weight', 
-                                        objective_function='CPM',
-                                        resolution_parameter=1)
-        leiden_50 = ig_g.community_leiden(weights='weight', 
-                                        objective_function='CPM',
-                                        resolution_parameter=0.5)
-        leiden_25 = ig_g.community_leiden(weights='weight', 
-                                        objective_function='CPM',
-                                        resolution_parameter=0.25)
-        leiden_10 = ig_g.community_leiden(weights='weight', 
-                                        objective_function='CPM',
-                                        resolution_parameter=0.1)
+        walktrap = ig_g.community_walktrap(weights='weight').as_clustering()
+        # leiden_1 = ig_g.community_leiden(weights='weight', 
+        #                                 objective_function='CPM',
+        #                                 resolution_parameter=1)
+        # leiden_50 = ig_g.community_leiden(weights='weight', 
+        #                                 objective_function='CPM',
+        #                                 resolution_parameter=0.5)
+        # leiden_25 = ig_g.community_leiden(weights='weight', 
+        #                                 objective_function='CPM',
+        #                                 resolution_parameter=0.25)
+        # leiden_10 = ig_g.community_leiden(weights='weight', 
+        #                                 objective_function='CPM',
+        #                                 resolution_parameter=0.1)
         # filter small comms
-        walktrap4 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in walktrap4 if len(comm) > 2]
-        walktrap10 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in walktrap10 if len(comm) > 2]
-        leiden_1 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_1 if len(comm) > 2]
-        leiden_50 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_50 if len(comm) > 2]
-        leiden_25 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_25 if len(comm) > 2]
-        leiden_10 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_10 if len(comm) > 2]
+        walktrap = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in walktrap if len(comm) > 2]
+        # leiden_1 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_1 if len(comm) > 2]
+        # leiden_50 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_50 if len(comm) > 2]
+        # leiden_25 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_25 if len(comm) > 2]
+        # leiden_10 = [[int(ig_g.vs[node]["_nx_name"]) for node in comm] for comm in leiden_10 if len(comm) > 2]
 
         alg_params = [
-            ("walktrap,4", walktrap4),
-            ("walktrap,10", walktrap10),
-            ("leiden,1.0", leiden_1),
-            ("leiden,0.50", leiden_50),
-            ("leiden,0.25", leiden_25),
-            ("leiden,0.10", leiden_10)
+            ("walktrap,4", walktrap),
         ]
         
         # now we have 2 siwo partitions and 4 leiden partitions to evaluate
@@ -85,58 +78,58 @@ def main():
             dictionary = ng_dict
 
 
-            # sort by degree
-            for comm in partition:
-                comm.sort(key=lambda node: community_utils.get_degree(node, nx_g), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
+            # # sort by degree
+            # for comm in partition:
+            #     comm.sort(key=lambda node: community_utils.get_degree(node, nx_g), reverse=True)
+            # # get topics as terms
+            # topics = [[dictionary[node] for node in comm] for comm in partition]
 
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["test"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},degree,{coherence},{topn},{score}"
-                        f.write(row + "\n")
+            # # evaluate on train, test, and wiki with both c_v and npmi
+            # for ref in ["test"]:
+            #     key = train_data + "_" + ref
+            #     ref_corpus = master_object[key]
+            #     for coherence in ["c_v", "c_npmi"]:
+            #         for topn in [5, 10, 20]:
+            #             cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
+            #             score = cm.get_coherence()
+            #             row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},degree,{coherence},{topn},{score}"
+            #             f.write(row + "\n")
 
 
-            # sort by weighted degree
-            for comm in partition:
-                comm.sort(key=lambda node: community_utils.get_weighted_degree(node, nx_g), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
+            # # sort by weighted degree
+            # for comm in partition:
+            #     comm.sort(key=lambda node: community_utils.get_weighted_degree(node, nx_g), reverse=True)
+            # # get topics as terms
+            # topics = [[dictionary[node] for node in comm] for comm in partition]
 
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["test"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_degree,{coherence},{topn},{score}"
-                        f.write(row + "\n")
+            # # evaluate on train, test, and wiki with both c_v and npmi
+            # for ref in ["test"]:
+            #     key = train_data + "_" + ref
+            #     ref_corpus = master_object[key]
+            #     for coherence in ["c_v", "c_npmi"]:
+            #         for topn in [5, 10, 20]:
+            #             cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
+            #             score = cm.get_coherence()
+            #             row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_degree,{coherence},{topn},{score}"
+            #             f.write(row + "\n")
 
-            # sort by internal degree
-            for comm in partition:
-                c = [str(node) for node in comm]
-                comm.sort(key=lambda node: community_utils.get_internal_degree(node, c, nx_g), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
+            # # sort by internal degree
+            # for comm in partition:
+            #     c = [str(node) for node in comm]
+            #     comm.sort(key=lambda node: community_utils.get_internal_degree(node, c, nx_g), reverse=True)
+            # # get topics as terms
+            # topics = [[dictionary[node] for node in comm] for comm in partition]
 
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["test"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_degree,{coherence},{topn},{score}"
-                        f.write(row + "\n")
+            # # evaluate on train, test, and wiki with both c_v and npmi
+            # for ref in ["test"]:
+            #     key = train_data + "_" + ref
+            #     ref_corpus = master_object[key]
+            #     for coherence in ["c_v", "c_npmi"]:
+            #         for topn in [5, 10, 20]:
+            #             cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
+            #             score = cm.get_coherence()
+            #             row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_degree,{coherence},{topn},{score}"
+            #             f.write(row + "\n")
 
             # sort by internal weighted degree
             for comm in partition:
@@ -156,41 +149,41 @@ def main():
                         row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},internal_weighted_degree,{coherence},{topn},{score}"
                         f.write(row + "\n")
 
-            # sort by embeddedness
-            for comm in partition:
-                c = [str(node) for node in comm]
-                comm.sort(key=lambda node: community_utils.get_embeddedness(node, c, nx_g), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
+            # # sort by embeddedness
+            # for comm in partition:
+            #     c = [str(node) for node in comm]
+            #     comm.sort(key=lambda node: community_utils.get_embeddedness(node, c, nx_g), reverse=True)
+            # # get topics as terms
+            # topics = [[dictionary[node] for node in comm] for comm in partition]
 
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["test"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},embeddedness,{coherence},{topn},{score}"
-                        f.write(row + "\n")
+            # # evaluate on train, test, and wiki with both c_v and npmi
+            # for ref in ["test"]:
+            #     key = train_data + "_" + ref
+            #     ref_corpus = master_object[key]
+            #     for coherence in ["c_v", "c_npmi"]:
+            #         for topn in [5, 10, 20]:
+            #             cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
+            #             score = cm.get_coherence()
+            #             row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},embeddedness,{coherence},{topn},{score}"
+            #             f.write(row + "\n")
 
-            # sort by weighted embeddedness
-            for comm in partition:
-                c = [str(node) for node in comm]
-                comm.sort(key=lambda node: community_utils.get_weighted_embeddedness(node, c, nx_g), reverse=True)
-            # get topics as terms
-            topics = [[dictionary[node] for node in comm] for comm in partition]
+            # # sort by weighted embeddedness
+            # for comm in partition:
+            #     c = [str(node) for node in comm]
+            #     comm.sort(key=lambda node: community_utils.get_weighted_embeddedness(node, c, nx_g), reverse=True)
+            # # get topics as terms
+            # topics = [[dictionary[node] for node in comm] for comm in partition]
 
-            # evaluate on train, test, and wiki with both c_v and npmi
-            for ref in ["test"]:
-                key = train_data + "_" + ref
-                ref_corpus = master_object[key]
-                for coherence in ["c_v", "c_npmi"]:
-                    for topn in [5, 10, 20]:
-                        cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
-                        score = cm.get_coherence()
-                        row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_embeddedness,{coherence},{topn},{score}"
-                        f.write(row + "\n")
+            # # evaluate on train, test, and wiki with both c_v and npmi
+            # for ref in ["test"]:
+            #     key = train_data + "_" + ref
+            #     ref_corpus = master_object[key]
+            #     for coherence in ["c_v", "c_npmi"]:
+            #         for topn in [5, 10, 20]:
+            #             cm = CoherenceModel(topics=topics, texts=ref_corpus, dictionary=dictionary, topn=topn, coherence=coherence)
+            #             score = cm.get_coherence()
+            #             row = f"{train_data},{ref},{ner},{pos_filter},{phrase},{phrase_threshold},{alg_param},{window},{edge_type},{weight_threshold},weighted_embeddedness,{coherence},{topn},{score}"
+            #             f.write(row + "\n")
         t1 = time()
         print(f"{t1 - t0} seconds", network)
     f.close()
