@@ -48,10 +48,11 @@ def main():
         model = Top2Vec(corpus, speed="learn", workers=1)
         t1 = time()
         t2v_times.append(t1 - t0)
+        topic_words, _, _ = model.get_topics()
 
-        cm = CoherenceModel(model=model, texts=master_object["ng_test"], dictionary=dictionary, topn=10, coherence="c_v")
+        cm = CoherenceModel(topics=topic_words, texts=master_object["ng_test"], dictionary=dictionary, topn=10, coherence="c_v")
         t2v_cvs.append(cm.get_coherence())
-        cm = CoherenceModel(model=model, texts=master_object["ng_test"], dictionary=dictionary, topn=10, coherence="c_npmi")
+        cm = CoherenceModel(topics=topic_words, texts=master_object["ng_test"], dictionary=dictionary, topn=10, coherence="c_npmi")
         t2v_npmis.append(cm.get_coherence())
 
         print(f"Done t2v {i}")
