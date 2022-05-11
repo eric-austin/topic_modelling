@@ -16,7 +16,7 @@ def main():
     # rt_dict = master_object["rt_dict"]
     bbc_dict = master_object["bbc_dict"]
 
-    f = open("bbc2_t2v_results.csv", "a")
+    # f = open("bbc2_t2v_results.csv", "a")
 
     # let's use 20NG first
     # t0 = time()
@@ -57,6 +57,7 @@ def main():
     corpus = [" ".join(text) for text in master_object["bbc_train"]]
     t2v = Top2Vec(corpus, speed="learn")
     topic_words, _, _ = t2v.get_topics()
+    print(f"Num topics: {len(topic_words)}")
     for ref in ["test"]:
         key = "bbc_" + ref
         ref_corpus = master_object[key]
@@ -65,11 +66,11 @@ def main():
                 cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=bbc_dict, topn=topn, coherence=coherence)
                 score = cm.get_coherence()
                 row = f"bbc,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
-                f.write(row + "\n")
+                # f.write(row + "\n")
     t1 = time()
     print(f"t2v on bbc finished in {t1 - t0} seconds")
 
-    f.close()
+    # f.close()
 
 if __name__ == "__main__":
     main()
