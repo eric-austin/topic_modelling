@@ -11,20 +11,23 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./ng2_master_object.obj", "rb") as f:
+    with open("./ng1_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     ng_dict = master_object["ng_dict"]
     # bbc_dict = master_object["bbc_dict"]
 
-    f = open("ng2_lda_results.csv", "a")
+    f = open("ng1_lda_results.csv", "a")
 
     # first lets evaluate LDA
     # let's use 20NG first
     t0 = time()
-    for n_topics in [20, 50, 100]:
+    for n_topics in [5, 10, 20, 50, 100, 200]:
         corpus = [ng_dict.doc2bow(text) for text in master_object["ng_train"]]
+        t00 = time()
         lda = LdaModel(corpus, num_topics=n_topics, iterations=1000)
+        t11 = time()
+        print(f"LDA {n_topics} topics {t11 - t00} seconds")
         for ref in ["test"]:
             key = "ng_" + ref
             ref_corpus = master_object[key]
