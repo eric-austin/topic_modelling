@@ -45,7 +45,10 @@ def main():
     t0 = time()
     for n_topics in [5, 10, 20, 50, 100, 200]:
         corpus = [rt_dict.doc2bow(text) for text in master_object["rt_train"]]
+        t00 = time()
         lda = LdaModel(corpus, num_topics=n_topics, iterations=2000)
+        t11 = time()
+        print(f"LDA {n_topics} topics {t11 - t00} seconds")
         for ref in ["test"]:
             key = "rt_" + ref
             ref_corpus = master_object[key]
