@@ -86,11 +86,11 @@ def main():
     walktrap_cvs = []
     walktrap_npmis = []
 
-    nx_g = nx.read_weighted_edgelist("./ng1_networks/ng_sentence_count_0.txt")
+    nx_g = nx.read_weighted_edgelist("./ng1_networks/ng_sentence_count_2.txt")
     ig_g = ig.Graph.from_networkx(nx_g)
 
     for i in range(10):
-        siwo_a = community_utils.read_siwo_comms("./ng1_siwo_comms/a_ng_sentence_count_0.txt")
+        siwo_a = community_utils.read_siwo_comms("./ng1_siwo_comms/a_ng_sentence_count_2.txt")
         siwo_a = [comm for comm in siwo_a if len(comm) > 2]
 
         t0 = time()
