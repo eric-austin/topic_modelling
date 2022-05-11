@@ -9,14 +9,14 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./rt2_master_object.obj", "rb") as f:
+    with open("./bbc1_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     # ng_dict = master_object["ng_dict"]
-    rt_dict = master_object["rt_dict"]
-    # bbc_dict = master_object["bbc_dict"]
+    # rt_dict = master_object["rt_dict"]
+    bbc_dict = master_object["bbc_dict"]
 
-    f = open("rt2_t2v_results.csv", "a")
+    f = open("bbc1_t2v_results.csv", "a")
 
     # let's use 20NG first
     # t0 = time()
@@ -35,22 +35,39 @@ def main():
     # t1 = time()
     # print(f"t2v on 20 NG finished in {t1 - t0} seconds")
 
+    # # now we'll do reuters
+    # t0 = time()
+    # corpus = [" ".join(text) for text in master_object["rt_train"]]
+    # t2v = Top2Vec(corpus, speed="learn")
+    # topic_words, _, _ = t2v.get_topics()
+    # for ref in ["test"]:
+    #     key = "rt_" + ref
+    #     ref_corpus = master_object[key]
+    #     for coherence in ["c_v", "c_npmi"]:
+    #         for topn in [5, 10, 20]:
+    #             cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
+    #             score = cm.get_coherence()
+    #             row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
+    #             f.write(row + "\n")
+    # t1 = time()
+    # print(f"t2v on rt finished in {t1 - t0} seconds")
+
     # now we'll do reuters
     t0 = time()
-    corpus = [" ".join(text) for text in master_object["rt_train"]]
+    corpus = [" ".join(text) for text in master_object["bbc_train"]]
     t2v = Top2Vec(corpus, speed="learn")
     topic_words, _, _ = t2v.get_topics()
     for ref in ["test"]:
-        key = "rt_" + ref
+        key = "bbc_" + ref
         ref_corpus = master_object[key]
         for coherence in ["c_v", "c_npmi"]:
             for topn in [5, 10, 20]:
-                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=rt_dict, topn=topn, coherence=coherence)
+                cm = CoherenceModel(topics=topic_words, texts=ref_corpus, dictionary=bbc_dict, topn=topn, coherence=coherence)
                 score = cm.get_coherence()
-                row = f"rt,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
+                row = f"bbc,{ref},{ner},{pos_filter},{phrase},{phrase_threshold},t2v,na,na,na,na,na,{coherence},{topn},{score}"
                 f.write(row + "\n")
     t1 = time()
-    print(f"t2v on rt finished in {t1 - t0} seconds")
+    print(f"t2v on bbc finished in {t1 - t0} seconds")
 
     f.close()
 
