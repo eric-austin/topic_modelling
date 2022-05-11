@@ -11,13 +11,13 @@ def main():
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./ng1_master_object.obj", "rb") as f:
+    with open("./ng2_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     ng_dict = master_object["ng_dict"]
     # bbc_dict = master_object["bbc_dict"]
 
-    f = open("ng1_lda_results.csv", "a")
+    f = open("ng2_lda_results.csv", "a")
 
     # first lets evaluate LDA
     # let's use 20NG first
