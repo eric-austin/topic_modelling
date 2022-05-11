@@ -5,18 +5,18 @@ from gensim.models.coherencemodel import CoherenceModel
 
 def main():
     ner = "1"
-    pos_filter = "3"
+    pos_filter = "0"
     phrase = "npmi"
     phrase_threshold = "0.35"
 
-    with open("./bbc1_master_object.obj", "rb") as f:
+    with open("./bbc2_master_object.obj", "rb") as f:
         master_object = pickle.load(f)
 
     # ng_dict = master_object["ng_dict"]
     # rt_dict = master_object["rt_dict"]
     bbc_dict = master_object["bbc_dict"]
 
-    f = open("bbc1_t2v_results.csv", "a")
+    f = open("bbc2_t2v_results.csv", "a")
 
     # let's use 20NG first
     # t0 = time()
